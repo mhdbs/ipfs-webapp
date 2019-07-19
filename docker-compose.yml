@@ -1,0 +1,33 @@
+version: '3.5'
+
+services:
+  web-app:
+    container_name: web-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    volumes:
+     - .:/code
+     - /code/node_modules
+    depends_on:
+      - ipfs
+    networks:
+      - ipfs
+
+  ipfs:
+    image: ipfs/go-ipfs:latest
+    hostname: ipfs_host1
+    volumes:
+    - "./export:/export"
+    - "./data/ipfs:/data/ipfs"
+    ports:
+    - "5001:5001"
+    - "4001:4001"
+    - "8080:8080"
+    networks:
+    - "ipfs"
+
+networks:
+  ipfs:
